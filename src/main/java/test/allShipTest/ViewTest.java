@@ -1,11 +1,11 @@
-package test;
+package test.allShipTest;
 
 
 import datamodel.GlobalImportData;
-import entity.importData.CraneInfo;
-import entity.importData.CraneInfoProcess;
-import entity.importData.VoyageInfo;
-import entity.importData.VoyageInfoProcess;
+import importDataInfo.CraneInfo;
+import importDataProcess.CraneInfoProcess;
+import importDataInfo.VoyageInfo;
+import importDataProcess.VoyageInfoProcess;
 import utils.FileUtil;
 import view.ImportDataFrame;
 
@@ -20,7 +20,7 @@ public class ViewTest {
 
     public static void main(String[] args) {
 
-        String filePath = "12.06data/";
+        String filePath = "data/cwp/12.06data/";
 
         String cr = FileUtil.readFileToString(new File(filePath + "CwpCrane.txt")).toString();
         String vo = FileUtil.readFileToString(new File(filePath + "CwpVoyage.txt")).toString();

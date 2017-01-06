@@ -1,7 +1,7 @@
 package view;
 
 import datamodel.GlobalImportData;
-import entity.importData.VoyageInfo;
+import importDataInfo.VoyageInfo;
 
 import javax.swing.*;
 import java.awt.*;

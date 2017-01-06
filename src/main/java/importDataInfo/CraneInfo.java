@@ -1,4 +1,4 @@
-package entity.importData;
+package importDataInfo;
 
 import java.util.List;
 

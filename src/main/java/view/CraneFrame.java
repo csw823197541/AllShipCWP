@@ -1,7 +1,7 @@
 package view;
 
 import datamodel.GlobalImportData;
-import entity.importData.CraneInfo;
+import importDataInfo.CraneInfo;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;

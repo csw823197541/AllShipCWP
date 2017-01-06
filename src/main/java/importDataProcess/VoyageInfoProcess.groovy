@@ -1,6 +1,7 @@
-package entity.importData
+package importDataProcess
 
 import groovy.json.JsonSlurper
+import importDataInfo.VoyageInfo
 
 import java.text.SimpleDateFormat
 

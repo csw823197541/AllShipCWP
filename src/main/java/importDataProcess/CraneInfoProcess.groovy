@@ -1,7 +1,9 @@
-package entity.importData
+package importDataProcess
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import importDataInfo.CraneInfo
+import importDataInfo.WorkingTimeRange
 
 import java.text.SimpleDateFormat
 

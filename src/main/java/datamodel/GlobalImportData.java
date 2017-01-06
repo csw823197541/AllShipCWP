@@ -1,7 +1,7 @@
 package datamodel;
 
-import entity.importData.CraneInfo;
-import entity.importData.VoyageInfo;
+import importDataInfo.CraneInfo;
+import importDataInfo.VoyageInfo;
 import listener.TableEvent;
 import listener.TableListener;
 

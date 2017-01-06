@@ -1,4 +1,4 @@
-package entity1
+package entity.importData
 
 import groovy.json.JsonSlurper
 

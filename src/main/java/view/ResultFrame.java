@@ -1,6 +1,6 @@
 package view;
 
-import datamodel.GlobalData;
+import datamodel.GlobalImportData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class ResultFrame extends JFrame {
     private void initComponents() {
         this.setTitle("算法结果页面");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(GlobalData.reWidth, GlobalData.reHeight);
+        this.setSize(GlobalImportData.reWidth, GlobalImportData.reHeight);
         this.setResizable(true);
         this.setLocationRelativeTo(null);// 居中显示
 

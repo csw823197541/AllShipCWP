@@ -1,9 +1,8 @@
 package view;
 
-import datamodel.GlobalData;
-import entity1.CraneInfo;
+import datamodel.GlobalImportData;
+import entity.importData.CraneInfo;
 
-import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.util.Arrays;
@@ -54,8 +53,8 @@ public class CraneFrame extends BaseFrame {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if (e.getType() == TableModelEvent.DELETE) {
-                    GlobalData.craneInfoMap.remove(selectRow);
-                    System.out.println("改变全局变量桥机信息,删除一条记录后：" + GlobalData.craneInfoMap.size());
+                    GlobalImportData.craneInfoMap.remove(selectRow);
+                    System.out.println("改变全局变量桥机信息,删除一条记录后：" + GlobalImportData.craneInfoMap.size());
                 } else if (e.getType() == TableModelEvent.UPDATE) {
                     String newValue = table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString();
                     if (!newValue.equals(oldValue)) {
@@ -69,7 +68,7 @@ public class CraneFrame extends BaseFrame {
 
     private void setNewValue(int row, int column) {
         Object value = table.getValueAt(row, column);
-        CraneInfo craneInfo = GlobalData.craneInfoMap.get(row);
+        CraneInfo craneInfo = GlobalImportData.craneInfoMap.get(row);
         switch (column) {
             case 0:
                 craneInfo.setID((String) value);
@@ -78,6 +77,6 @@ public class CraneFrame extends BaseFrame {
                 craneInfo.setCURRENTPOSITION(Integer.valueOf(value.toString()));
                 break;
         }
-        System.out.println("更新后的记录：" + GlobalData.craneInfoMap.get(row));
+        System.out.println("更新后的记录：" + GlobalImportData.craneInfoMap.get(row));
     }
 }

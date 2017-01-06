@@ -1,20 +1,17 @@
 package datamodel;
 
-import entity.Voyage;
-import entity1.CraneInfo;
-import entity1.VoyageInfo;
-import javafx.scene.control.Tab;
+import entity.importData.CraneInfo;
+import entity.importData.VoyageInfo;
 import listener.TableEvent;
 import listener.TableListener;
 
-import java.awt.event.ActionEvent;
 import java.util.*;
 
 /**
  * Created by csw on 2016/12/14 11:30.
  * Explain:
  */
-public class GlobalData {
+public class GlobalImportData {
 
     public static Integer ratio = 1;
 

@@ -1,6 +1,6 @@
 package view;
 
-import datamodel.GlobalData;
+import datamodel.GlobalImportData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +31,7 @@ public class ImportDataFrame extends JFrame {
 
         this.setTitle("算法数据导入界面");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(GlobalData.width, GlobalData.height);
+        this.setSize(GlobalImportData.width, GlobalImportData.height);
         this.setResizable(true);
         this.setLocationRelativeTo(null);// 居中显示
 
@@ -86,8 +86,8 @@ public class ImportDataFrame extends JFrame {
             }
         });
 
-        VoyageFrame voyageFrame = new VoyageFrame(new ArrayList<>(GlobalData.voyageMap.values()));
-        CraneFrame craneFrame = new CraneFrame(new ArrayList<>(GlobalData.craneInfoMap.values()));
+        VoyageFrame voyageFrame = new VoyageFrame(new ArrayList<>(GlobalImportData.voyageMap.values()));
+        CraneFrame craneFrame = new CraneFrame(new ArrayList<>(GlobalImportData.craneInfoMap.values()));
         voyCranePane.add(voyageFrame);
         voyCranePane.add(craneFrame);
 

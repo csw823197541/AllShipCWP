@@ -1,7 +1,5 @@
 package entity.cwp;
 
-import entity.WorkTimeRange;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ public class Hatch implements Serializable {
     private Integer moveCount;
     private String hatchNo;
     private String hatchSeq;
-    private List<entity.WorkTimeRange> workTimeRanges;
+    private List<WorkTimeRange> workTimeRanges;
 
     public HatchDynamic hatchDynamic;
     public List<Move> mMoves;
@@ -101,7 +99,7 @@ public class Hatch implements Serializable {
         this.hatchSeq = hatchSeq;
     }
 
-    public List<entity.WorkTimeRange> getWorkTimeRanges() {
+    public List<WorkTimeRange> getWorkTimeRanges() {
         return workTimeRanges;
     }
 

@@ -1,15 +1,12 @@
 package view;
 
-import datamodel.GlobalData;
-import entity1.VoyageInfo;
+import datamodel.GlobalImportData;
+import entity.importData.VoyageInfo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.RoundRectangle2D;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by csw on 2016/12/15 14:36.
@@ -17,8 +14,8 @@ import java.util.List;
  */
 public class ResultPanel extends JPanel {
 
-    private int width = GlobalData.reWidth;
-    private int height = GlobalData.reHeight;
+    private int width = GlobalImportData.reWidth;
+    private int height = GlobalImportData.reHeight;
 
     private DecimalFormat df = new DecimalFormat("#.000");
 
@@ -38,7 +35,7 @@ public class ResultPanel extends JPanel {
     private java.util.List<Ship> shipList;
 
     public ResultPanel() {
-        voyageInfoList = new ArrayList<>(GlobalData.voyageMap.values());
+        voyageInfoList = new ArrayList<>(GlobalImportData.voyageMap.values());
         shipList = new ArrayList<>();
         initTime();
         initShip();

@@ -1,18 +1,15 @@
 package test;
 
 
-import datamodel.GlobalData;
-import entity.Voyage;
-import entity1.CraneInfo;
-import entity1.CraneInfoProcess;
-import entity1.VoyageInfo;
-import entity1.VoyageInfoProcess;
+import datamodel.GlobalImportData;
+import entity.importData.CraneInfo;
+import entity.importData.CraneInfoProcess;
+import entity.importData.VoyageInfo;
+import entity.importData.VoyageInfoProcess;
 import utils.FileUtil;
 import view.ImportDataFrame;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,12 +27,12 @@ public class ViewTest {
 
         List<CraneInfo> craneInfoList = CraneInfoProcess.getCraneInfo(cr);
         for (int i = 0; i < craneInfoList.size(); i++) {
-            GlobalData.craneInfoMap.put(i, craneInfoList.get(i));
+            GlobalImportData.craneInfoMap.put(i, craneInfoList.get(i));
         }
 
         List<VoyageInfo> voyageInfoList = VoyageInfoProcess.getVoyageInfo(vo);
         for (int i = 0; i < voyageInfoList.size(); i++) {
-            GlobalData.voyageMap.put(i, voyageInfoList.get(i));
+            GlobalImportData.voyageMap.put(i, voyageInfoList.get(i));
         }
 
         ImportDataFrame importDataFrame = new ImportDataFrame();

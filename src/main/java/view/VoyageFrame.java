@@ -1,9 +1,8 @@
 package view;
 
 
-import datamodel.GlobalData;
-import entity1.CraneInfo;
-import entity1.VoyageInfo;
+import datamodel.GlobalImportData;
+import entity.importData.VoyageInfo;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -47,8 +46,8 @@ public class VoyageFrame extends BaseFrame {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if (e.getType() == TableModelEvent.DELETE) {
-                    GlobalData.voyageMap.remove(selectRow);
-                    System.out.println("改变全局变量航次信息,删除一条记录后：" + GlobalData.voyageMap.size());
+                    GlobalImportData.voyageMap.remove(selectRow);
+                    System.out.println("改变全局变量航次信息,删除一条记录后：" + GlobalImportData.voyageMap.size());
                 } else if (e.getType() == TableModelEvent.UPDATE) {
                     String newValue = table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString();
                     if (!newValue.equals(oldValue)) {
@@ -66,7 +65,7 @@ public class VoyageFrame extends BaseFrame {
 
     private void setNewValue(int row, int column) throws ParseException {
         Object value = table.getValueAt(row, column);
-        VoyageInfo voyageInfo = GlobalData.voyageMap.get(row);
+        VoyageInfo voyageInfo = GlobalImportData.voyageMap.get(row);
         switch (column) {
             case 0:
                 voyageInfo.setVOTVOYID(Integer.valueOf(value.toString()));
@@ -87,7 +86,7 @@ public class VoyageFrame extends BaseFrame {
                 voyageInfo.setENDPOSITION(Integer.valueOf(value.toString()));
                 break;
         }
-        System.out.println("更新后的记录：" + GlobalData.voyageMap.get(row));
+        System.out.println("更新后的记录：" + GlobalImportData.voyageMap.get(row));
     }
 
 }

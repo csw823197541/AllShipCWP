@@ -1,7 +1,5 @@
 package entity.cwp;
 
-import entity.WorkTimeRange;
-
 import java.util.List;
 
 /**
@@ -27,7 +25,7 @@ public class Crane {
     private Integer craneSeq;
     private Integer speed;
     private Integer width;
-    private List<entity.WorkTimeRange> workTimeRanges;
+    private List<WorkTimeRange> workTimeRanges;
 
     public CraneDynamic craneDynamic;
 
@@ -179,7 +177,7 @@ public class Crane {
         this.width = width;
     }
 
-    public List<entity.WorkTimeRange> getWorkTimeRanges() {
+    public List<WorkTimeRange> getWorkTimeRanges() {
         return workTimeRanges;
     }
 

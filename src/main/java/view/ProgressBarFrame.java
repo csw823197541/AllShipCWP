@@ -1,11 +1,9 @@
 package view;
 
-import datamodel.GlobalData;
+import datamodel.GlobalImportData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by csw on 2016/12/15 11:38.
@@ -25,7 +23,7 @@ public class ProgressBarFrame extends JInternalFrame {
 
     public ProgressBarFrame() {
         super("程序处理进度", true ,true);
-        this.setBounds(GlobalData.width - 350, GlobalData.height - 180, 300, 80);
+        this.setBounds(GlobalImportData.width - 350, GlobalImportData.height - 180, 300, 80);
         this.setVisible(true);
         this.setLayout(new FlowLayout());
         add(progressBar);

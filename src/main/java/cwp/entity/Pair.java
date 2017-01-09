@@ -1,4 +1,4 @@
-package entity.cwp;
+package cwp.entity;
 
 import java.io.*;
 
@@ -17,6 +17,12 @@ public class Pair<A, B> implements Serializable {
     public Pair(A first, B second) {
         this.first = first;
         this.second = second;
+    }
+
+    public Pair(A first, B second, String realCraneId) {
+        this.first = first;
+        this.second = second;
+        this.realCraneId = realCraneId;
     }
 
     public A getFirst() {

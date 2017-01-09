@@ -91,14 +91,22 @@ public class CwpResultInfoToMove {
 
                                 if("L".equals(LD)) {
                                     PreStowageData preStowageData = preStowageDataMapL.get(vp);
-                                    cwpResultMoveInfo.setSize(preStowageData.getSIZE());
-                                    String bayId = preStowageData.getVBYBAYID();
-                                    cwpResultMoveInfo.setHATCHBWID(bayId);
+                                    if (preStowageData == null) {
+                                        System.out.println("没有发现船箱位L: "+vp);
+                                    } else {
+                                        cwpResultMoveInfo.setSize(preStowageData.getSIZE());
+                                        String bayId = preStowageData.getVBYBAYID();
+                                        cwpResultMoveInfo.setHATCHBWID(bayId);
+                                    }
                                 } else {
                                     PreStowageData preStowageData = preStowageDataMapD.get(vp);
-                                    cwpResultMoveInfo.setSize(preStowageData.getSIZE());
-                                    String bayId = preStowageData.getVBYBAYID();
-                                    cwpResultMoveInfo.setHATCHBWID(bayId);
+                                    if (preStowageData == null) {
+                                        System.out.println("没有发现船箱位D: " + vp);
+                                    } else {
+                                        cwpResultMoveInfo.setSize(preStowageData.getSIZE());
+                                        String bayId = preStowageData.getVBYBAYID();
+                                        cwpResultMoveInfo.setHATCHBWID(bayId);
+                                    }
                                 }
                                 cwpResultMoveInfo.setCranesPosition(cranePosition);
 

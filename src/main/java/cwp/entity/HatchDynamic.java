@@ -1,4 +1,4 @@
-package entity.cwp;
+package cwp.entity;
 
 import java.io.*;
 
@@ -9,26 +9,31 @@ import java.io.*;
 public class HatchDynamic implements Serializable {
 
     public Double mCurrentWorkPosition;
-    public Integer mMoveCount;
+    public Long mMoveCount;
     public Integer mCurrentMoveIdx;
 
-    public Integer mMoveCountL;
-    public Integer mMoveCountR;
+    public Long mMoveCountL;
+    public Long mMoveCountR;
 
-    public Integer mMoveCountDY;
-    public Integer mMoveCountD;
+    public Long mMoveCountDY;
+    public Long mMoveCountD;
+
+    public Integer mMoveCountD1;
+    public Integer isDividedHatch;
 
     public Integer isKeyHatch;
 
     public HatchDynamic() {
-        mMoveCount = 0;
+        mMoveCount = 0l;
         mCurrentMoveIdx = 0;
         mCurrentWorkPosition = 0.0;
-        mMoveCountL = 0;
-        mMoveCountR = 0;
-        mMoveCountDY = 0;
+        mMoveCountL = 0l;
+        mMoveCountR = 0l;
+        mMoveCountDY = 0l;
         isKeyHatch = 0;//not key
-        mMoveCountD = 0;
+        mMoveCountD = 0l;
+        mMoveCountD1 = 0;
+        isDividedHatch = 0;//not divided hatch
     }
 
     public Double getmCurrentWorkPosition() {
@@ -39,11 +44,11 @@ public class HatchDynamic implements Serializable {
         this.mCurrentWorkPosition = mCurrentWorkPosition;
     }
 
-    public Integer getmMoveCount() {
+    public Long getmMoveCount() {
         return mMoveCount;
     }
 
-    public void setmMoveCount(Integer mMoveCount) {
+    public void setmMoveCount(Long mMoveCount) {
         this.mMoveCount = mMoveCount;
     }
 

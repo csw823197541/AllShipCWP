@@ -1,4 +1,4 @@
-package entity.cwp;
+package cwp.entity;
 
 import java.io.*;
 
@@ -14,8 +14,13 @@ public class CraneDynamic implements Serializable {
     public Integer mMoveRangeFrom;
     public Integer mMoveRangeTo;
 
+    public Long mMoveCountL;
+    public Long mMoveCountR;
+
     public CraneDynamic() {
         mCurrentWorkST = 0;
+        mMoveCountL = -1L;
+        mMoveCountR = -1L;
     }
 
     public Integer getmCurrentWorkST() {

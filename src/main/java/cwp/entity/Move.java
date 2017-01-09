@@ -1,4 +1,4 @@
-package entity.cwp;
+package cwp.entity;
 
 import java.io.Serializable;
 

@@ -108,7 +108,8 @@ class CwpResultInfoProcess {
                 cwpResultInfo.WORKINGENDTIME = cwpResult.WORKINGENDTIME
                 cwpResultInfo.REALWORKINGSTARTTIME = cwpResult.REALWORKINGSTARTTIME
                 cwpResultInfo.WORKINGSTARTTIME = cwpResult.WORKINGSTARTTIME
-                cwpResultInfo.endMoveID = cwpResult.MoveID
+                cwpResultInfo.endMoveID = cwpResult.EndMoveID
+//                cwpResultInfo.LDULD = cwpResult.mLD
 
                 String hm = cwpResultInfo.HATCHID + "." + cwpResultInfo.startMoveID
 
@@ -131,12 +132,6 @@ class CwpResultInfoProcess {
                     println "error hatchId.moveOrder: " + hm;
                 }
 
-//                cwpResultInfo.MOVETYPE = cwpResult.MOVETYPE
-//                cwpResultInfo.LDULD = cwpResult.mLD
-
-//                cwpResultInfo.workingStartTime = new Date(stLong + cwpResultInfo.getREALWORKINGSTARTTIME()*1000)
-//                cwpResultInfo.workingEndTime = new Date(stLong + cwpResultInfo.getWORKINGENDTIME()*1000)
-//                cwpResultInfo.craneWorkStartTime = new Date(stLong + cwpResultInfo.getWORKINGSTARTTIME()*1000)
                 cwpResultInfoList.add(cwpResultInfo)
             }
             cwpResultInfoList = changeWorkTime(cwpResultInfoList);

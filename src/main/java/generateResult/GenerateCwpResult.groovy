@@ -1,5 +1,6 @@
 package generateResult
 
+import cwp.CallCWP
 import importDataInfo.CraneInfo
 import importDataInfo.CwpResultInfo
 import importDataInfo.HatchInfo
@@ -84,6 +85,9 @@ class GenerateCwpResult {
 
 //                    cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr,
 //                            craneSize + "", increaseTime, decreaseTime, whatIsTheShip);
+
+                    //调用java版本的cwp
+                    cwpResultStr = CallCWP.cwp(craneJsonStr, hatchJsonStr, moveJsonStr);
 
                 } catch (Exception e) {
                     e.printStackTrace();

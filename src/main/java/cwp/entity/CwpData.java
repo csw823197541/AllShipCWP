@@ -1,4 +1,4 @@
-package entity.cwp;
+package cwp.entity;
 
 import java.util.*;
 
@@ -11,6 +11,9 @@ public class CwpData {
     public Integer cwpBranchWidth = 1;
     public Integer cwpBranchLimit = 4;
 
+    public static Long surplusMoveCount = 0L;
+    public static Long moveCostTime = 0L;
+
     public List<Crane> cranes;
     public List<Hatch> hatches;
     public List<Move> moves;
@@ -19,8 +22,11 @@ public class CwpData {
 
     public Map<String, Integer> hatchIdxMap;
     public Map<String, Integer> craneIdxMap;
-
     public Map<Integer, Set<Double>> hatchIdxPosMap;
+
+    public Map<Integer, List<Hatch>> craneMoveFromToMap;
+
+    public MoveTime[][] mt;
 
     public CwpData() {
         cranes = new ArrayList<>();
@@ -31,5 +37,6 @@ public class CwpData {
         hatchIdxMap = new HashMap<>();
         hatchIdxPosMap = new HashMap<>();
         craneIdxMap = new HashMap<>();
+        craneMoveFromToMap = new HashMap<>();
     }
 }

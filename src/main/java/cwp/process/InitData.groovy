@@ -92,6 +92,7 @@ public class InitData {
                 hatch.vesselId = it.VESSELID;
                 hatch.length = it.LENGTH;
                 hatch.moveCount = it.MOVECOUNT;
+                hatch.cabPosition = it.cabPosition;
                 hatch.hatchDynamic.mMoveCountL = it.MOVECOUNT;
                 hatch.hatchDynamic.mMoveCountR = it.MOVECOUNT;
                 hatch.hatchDynamic.mMoveCount = it.MOVECOUNT;

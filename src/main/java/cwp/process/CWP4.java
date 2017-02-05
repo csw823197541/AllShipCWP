@@ -8,26 +8,29 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by csw on 2017/1/7 10:43.
- * Explain: process divided hatch
+ * Created by csw on 2017/1/13 09:37.
+ * Explain: process algorithm return result, add time concept, add incoming parameters
  */
-public class CWP1 {
+public class CWP4 {
 
     private CwpData cwpData;
     private DPResult dpResult;
 
+    private String hatchId = "";
+    private int breakdown = 100;
+
     private List<HatchParameter> hatchParameterList;
 
-    public CWP1() {
+    public CWP4() {
         cwpData = new CwpData();
         dpResult = new DPResult();
         hatchParameterList = new ArrayList<>();
     }
 
-    public void initData(String craneJsonStr, String hatchJsonStr, String moveJsonStr) {
+    public void initData(String craneJsonStr, String hatchJsonStr, String moveJsonStr) throws Exception {
 
         List<Crane> inputCranes = sortCraneByPosition(InitData.initCrane(craneJsonStr));
-        int craneSize = inputCranes.size() > 4 ? 6 : inputCranes.size();
+        int craneSize = inputCranes.size() > 4 ? 5 : inputCranes.size();
         for (int k = 0; k < craneSize; k++) {
             cwpData.cranes.add(inputCranes.get(k));
         }
@@ -35,22 +38,24 @@ public class CWP1 {
         cwpData.hatches = sortHatchById(InitData.initHatch(hatchJsonStr));
         cwpData.moves = InitData.initMove(moveJsonStr);
 
+        //init hatch index map
         int i = 0;
         for (Hatch hatch : cwpData.hatches) {
             cwpData.hatchIdxMap.put(hatch.getHatchId(), i++);
         }
 
+        //init hatch's moves
         sortMoveByMoveOrder(cwpData.moves);
         for (Move move : cwpData.moves) {
             cwpData.hatches.get(cwpData.hatchIdxMap.get(move.getHatchId())).mMoves.add(move);
         }
 
         //init hatchDynamic.mCurrentWorkPosition
-        for (Hatch hatch : cwpData.hatches) {
+        cwpData.hatches.forEach(hatch -> {
             if (hatch.hatchDynamic.mMoveCount != 0) {
                 hatch.hatchDynamic.mCurrentWorkPosition = hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx).getHorizontalPosition();
             }
-        }
+        });
 
         //init crane move in hatch from where to where
         for (int c = 0; c < cwpData.cranes.size(); c++) {
@@ -70,6 +75,9 @@ public class CWP1 {
 
         //init hatch parameter
 //        testParam();
+
+        //init cab's position
+        cwpData.cabPosition = cwpData.hatchIdxMap.get(cwpData.hatches.get(0).getCabPosition());
     }
 
     //test
@@ -84,6 +92,7 @@ public class CWP1 {
         hatchParameterList.add(new HatchParameter("23203", 3000L));
         hatchParameterList.add(new HatchParameter("23202", 2000L));
         hatchParameterList.add(new HatchParameter("23201", 1000L));
+//        hatchParameterList.add(new HatchParameter("36247", 100000L));
     }
 
     private List<Hatch> sortHatchById(List<Hatch> hatches) {
@@ -125,8 +134,6 @@ public class CWP1 {
         if (nc <= 0 || nh <= 0) {
             return;
         }
-
-        int mean = 0;
         int allMoveCount = 0;
         int realHatchNum = 0;
         for (Hatch hatch : cwpData.hatches) {
@@ -135,15 +142,11 @@ public class CWP1 {
                 realHatchNum++;
             }
         }
-        if (realHatchNum < nc) {
-            mean = allMoveCount / realHatchNum;
-        } else {
-            mean = allMoveCount / nc;
-        }
+        int mean = realHatchNum < nc ? allMoveCount / realHatchNum : allMoveCount / nc;
         System.out.println("all: " + allMoveCount + " mean: " + mean);
         int c = 0;
         long tmpMoveCount = 0;
-        int amount = 0;
+        int amount = cwpData.amount;
         for (int j = 0; j < nh; j++) {
             Hatch hatch = cwpData.hatches.get(j);
             tmpMoveCount += hatch.hatchDynamic.mMoveCount;
@@ -208,7 +211,7 @@ public class CWP1 {
                 }
             }
         }
-
+        //log
         String str3 = "divided hatch: ";
         for (Hatch hatch : cwpData.hatches) {
             if (hatch.hatchDynamic.isDividedHatch == 1) {
@@ -216,7 +219,6 @@ public class CWP1 {
             }
         }
         System.out.println(str3);
-        //log
     }
 
     //who is the key hatch
@@ -225,59 +227,28 @@ public class CWP1 {
         int twoKeyMoveCount = 0;
         int max = 0;
         int maxJ1 = -1, maxJ2 = -1;
-        for (int j = 0; j < hatchList.size() - 1; j++) {
-            twoKeyMoveCount = hatchList.get(j).getMoveCount() + hatchList.get(j + 1).getMoveCount();
-            if (twoKeyMoveCount > max) {
-                max = twoKeyMoveCount;
-                maxJ1 = j;
-                maxJ2 = j + 1;
+        if (hatchList.size() > 1) {
+            for (int j = 0; j < hatchList.size() - 1; j++) {
+                twoKeyMoveCount = hatchList.get(j).getMoveCount() + hatchList.get(j + 1).getMoveCount();
+                if (twoKeyMoveCount > max) {
+                    max = twoKeyMoveCount;
+                    maxJ1 = j;
+                    maxJ2 = j + 1;
+                }
             }
+        } else {
+            System.out.println("one hatch!!!");
+            maxJ1 = maxJ2 = 0;
         }
+
         if (maxJ1 != -1 && maxJ2 != -1) {
             cwpData.hatches.get(maxJ1).hatchDynamic.isKeyHatch = 1;
             cwpData.hatches.get(maxJ2).hatchDynamic.isKeyHatch = 1;
         }
         //log
-        System.out.println("key hatch: " + maxJ1 + "--" + maxJ2 + ", moveCount: " + max);
-    }
-
-    private void changeCraneMoveRangeByDividedHatch(DPResult dpResultLast) {
-        List<Pair> trace_back = dpResultLast.dpTraceBack;
-        if (trace_back.isEmpty()) {
-            //get out method
-            return;
-        }
-        int nr = trace_back.size();
-        boolean isChange = false;
-        for (int t = 0; t < nr; t++) {
-            int i = (Integer) trace_back.get(t).first;
-            Crane crane = cwpData.cranes.get(i);
-            Hatch hatch = cwpData.hatches.get((Integer) trace_back.get(t).second);
-            if (hatch.hatchDynamic.isDividedHatch == 1) {
-                int j = cwpData.hatchIdxMap.get(hatch.getHatchId());
-                if (j == crane.craneDynamic.mMoveRangeFrom) {
-                    if (i - 1 >= 0) {
-                        isChange = true;
-                        cwpData.cranes.get(i -1).craneDynamic.mMoveRangeTo -= 1;
-                    }
-                }
-                if (j == crane.craneDynamic.mMoveRangeTo) {
-                    if (i + 1 < cwpData.cranes.size() - 1) {
-                        isChange = true;
-                        cwpData.cranes.get(i + 1).craneDynamic.mMoveRangeFrom += 1;
-                    }
-                }
-            }
-        }
-        if (isChange) {//if crane's moveRange had changed
-            for (int i = 0; i < cwpData.cranes.size(); i++) {
-                Crane crane = cwpData.cranes.get(i);
-                cwpData.craneMoveFromToMap.get(i).clear();
-                for (int j = crane.craneDynamic.mMoveRangeFrom; j <= crane.craneDynamic.mMoveRangeTo; j++) {
-                    cwpData.craneMoveFromToMap.get(i).add(cwpData.hatches.get(j));
-                }
-            }
-        }
+        System.out.println("key hatch: " + maxJ1 + "--" + maxJ2 + ", moveCount: " +
+                cwpData.hatches.get(maxJ1).getMoveCount() + " + " +
+                "" + cwpData.hatches.get(maxJ2).getMoveCount() + " = " + max);
     }
 
     //change crane move range, when the mMoveCount of the hatch reach the value of mMoveCountL
@@ -298,8 +269,7 @@ public class CWP1 {
                         crane.craneDynamic.mMoveCountL = -1L;
                         hatchLeft.hatchDynamic.mMoveCountR = 0L;
                     }
-                }
-                else if (hatchRight.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountR.intValue()) {
+                } else if (hatchRight.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountR.intValue()) {
                     if (hatchRight.hatchDynamic.mMoveCountR > 0) {
                         isChange = true;
                         System.out.println("reach the left mMoveCount: " + hatchRight.hatchDynamic.mCurrentMoveIdx);
@@ -307,6 +277,8 @@ public class CWP1 {
                         crane.craneDynamic.mMoveCountR = -1L;
                         hatchRight.hatchDynamic.mMoveCountL = 0L;
                     }
+                } else {
+                    //test crane breakdown
                 }
             }
         }
@@ -335,41 +307,16 @@ public class CWP1 {
         //change the key hatch's moveCountD
         for (int j = 0; j < hatches.size(); j++) {
             Hatch hatch = hatches.get(j);
-            if (hatch.hatchDynamic.isKeyHatch == 1) {//is key hatch
-                if (hatch.hatchDynamic.mMoveCount > 0) {
-                    if (hatch.hatchDynamic.mMoveCountL < hatch.getMoveCount()) {
-                        hatch.hatchDynamic.mMoveCountD = 11000L;
-                    } else {
-                        hatch.hatchDynamic.mMoveCountD = 10000L;
+            if (hatch.hatchDynamic.mMoveCount > 0) {
+                if (hatch.hatchDynamic.isKeyHatch == 1) {//is key hatch
+                    if (hatch.hatchDynamic.isDividedHatch == 1) {//10000
+                        hatch.hatchDynamic.mMoveCountD = cwpData.keyHatchMoveCount + cwpData.dividedHatchMoveCount;
+                    } else {//11000
+                        hatch.hatchDynamic.mMoveCountD = cwpData.keyHatchMoveCount;
                     }
-                }
-            } else {
-                if (hatch.hatchDynamic.mMoveCountL < hatch.getMoveCount()) {//is divided hatch
-                    if (hatch.hatchDynamic.mMoveCount > 0) {
-                        hatch.hatchDynamic.mMoveCountD = 1000L;
-                    }
-                }
-            }
-        }
-    }
-
-    private void notChangeMoveCountDByKeyAndDividedHatch() {
-        List<Hatch> hatches = cwpData.hatches;
-        //change the key hatch's moveCountD
-        for (int j = 0; j < hatches.size(); j++) {
-            Hatch hatch = hatches.get(j);
-            if (hatch.hatchDynamic.isKeyHatch == 1) {//is key hatch
-                if (hatch.hatchDynamic.mMoveCount > 0) {
-                    if (hatch.hatchDynamic.mMoveCountL < hatch.getMoveCount()) {
-                        hatch.hatchDynamic.mMoveCountD = 10000L;
-                    } else {
-                        hatch.hatchDynamic.mMoveCountD = hatch.hatchDynamic.mMoveCount;
-                    }
-                }
-            } else {
-                if (hatch.hatchDynamic.mMoveCountL < hatch.getMoveCount()) {//is divided hatch
-                    if (hatch.hatchDynamic.mMoveCount > 0) {
-                        hatch.hatchDynamic.mMoveCountD = hatch.hatchDynamic.mMoveCount;
+                } else {
+                    if (hatch.hatchDynamic.isDividedHatch == 1) {//is divided hatch
+                        hatch.hatchDynamic.mMoveCountD = cwpData.dividedHatchMoveCount;//1000
                     }
                 }
             }
@@ -379,6 +326,7 @@ public class CWP1 {
     //change the hatch's dynamic mMoveCountD to mMoveCountDY, before call dynamic algorithm
     private void changeDynamicMoveCount() {
         List<Hatch> hatches = cwpData.hatches;
+
         for (int j = 0; j < hatches.size(); j++) {
             Hatch hatch = hatches.get(j);
             if (hatch.hatchDynamic.mMoveCount != 0) {
@@ -396,17 +344,32 @@ public class CWP1 {
         }
     }
 
+    //keep working in last selected hatch
     private void keepSelectedHatchWork(DPResult dpResultLast) {
         List<Pair> trace_back = dpResultLast.dpTraceBack;
         if (!trace_back.isEmpty()) {
             int nr = trace_back.size();
             for (int t = 0; t < nr; t++) {
                 Hatch hatch = cwpData.hatches.get((int) trace_back.get(t).second);
-                if (hatch.hatchDynamic.mMoveCount > 0) {
-                    hatch.hatchDynamic.mMoveCountDY = 100000L;
+                if (hatch.hatchDynamic.mMoveCount > 0) {//100000, 50000
+//                    hatch.hatchDynamic.mMoveCountDY = hatch.hatchDynamic.isKeyHatch == 1
+//                            ? cwpData.keepWorkingMoveCount : cwpData.keepWorkingMoveCount / 2;
+                    hatch.hatchDynamic.mMoveCountDY = cwpData.keepWorkingMoveCount;
                 }
             }
         }
+    }
+
+    //change the key hatch's moveCountDY, ensure key road
+    private void keepWorkingInKeyHatch() {
+        List<Hatch> hatches = cwpData.hatches;
+        hatches.forEach(hatch -> {
+            if (hatch.hatchDynamic.mMoveCount > 0) {
+                if (hatch.hatchDynamic.isKeyHatch == 1) {
+                    hatch.hatchDynamic.mMoveCountDY = 100000L;
+                }
+            }
+        });
     }
 
     //calculate the cost of moveTime that each crane selects every hatch
@@ -416,7 +379,12 @@ public class CWP1 {
                 mt[i][j].dpDistance = Math.abs(cwpData.cranes.get(i).craneDynamic.mCurrentPosition - cwpData.hatches.get(j).hatchDynamic.mCurrentWorkPosition);
                 if (j < cwpData.cranes.get(i).craneDynamic.mMoveRangeFrom
                         || j > cwpData.cranes.get(i).craneDynamic.mMoveRangeTo) {
-                    mt[i][j].dpMoveTime = cwpData.hatches.get(j).hatchDynamic.mMoveCountDY;
+                    if (cwpData.hatches.get(j).hatchDynamic.mMoveCountDY > 0) {
+                        mt[i][j].dpMoveTime = cwpData.hatches.get(j).hatchDynamic.mMoveCountDY - 1L;
+                    } else {
+                        mt[i][j].dpMoveTime = cwpData.hatches.get(j).hatchDynamic.mMoveCountDY;
+                    }
+//                    mt[i][j].dpMoveTime = cwpData.hatches.get(j).hatchDynamic.mMoveCountDY;
                 } else {
                     if (dpResultLast.dpTraceBack.size() > 0) {
                         Hatch hatch = cwpData.hatches.get(j);
@@ -452,28 +420,22 @@ public class CWP1 {
     public void cwpSearch(int depth) {
         boolean isFinish = true;
         for (int j = 0; j < cwpData.hatches.size(); j++) {
-            if (cwpData.hatches.get(j).hatchDynamic.mMoveCount != 0) {
+            if (cwpData.hatches.get(j).hatchDynamic.mMoveCount > 0) {
                 isFinish = false;
             }
         }
         int d = 100;
-        if (depth > d) {
-            isFinish = true;
-        }
+        isFinish = depth > d ? true : isFinish;
         if (isFinish) {
             if (cwpData.cwpBestSolution.getCwpWorkTime() == 0 ||
                     cwpData.cwpCurSolution.getCwpWorkTime() < cwpData.cwpBestSolution.getCwpWorkTime()) {
                 cwpData.cwpBestSolution = cwpData.cwpCurSolution.deepCopy();
             }
         }
-        int branch_width = 1;
-        if (depth < cwpData.cwpBranchLimit) {
-            branch_width = cwpData.cwpBranchWidth;
-        }
+        int branch_width = depth < cwpData.cwpBranchLimit ? cwpData.cwpBranchWidth : 1;
+
         List<DPResult> dp_Results = new ArrayList<>();
         DPResult dpResultLast = dpResult.deepCopy();
-
-//        changeCraneMoveRangeByDividedHatch(dpResultLast);
 
         //before every dynamic plan, must check the crane's moveRange
         changeCraneMoveRange();
@@ -497,8 +459,10 @@ public class CWP1 {
         //keep the last select hatch
         keepSelectedHatchWork(dpResultLast);
 
-        //according to the last choices selected by cranes,
-        //calculate the cost of moveTime that each crane selects every hatch
+        //keep working in key hatch
+//        keepWorkingInKeyHatch();
+
+        //according to the last choices selected by cranes, calculate the cost of moveTime that each crane selects every hatch
         calculateMoveTime(cwpData.mt, dpResultLast);
 
         //log
@@ -507,56 +471,23 @@ public class CWP1 {
             str1 += hatch.hatchDynamic.mMoveCountDY + "(" + hatch.hatchDynamic.mMoveCount + ":" + hatch.hatchDynamic.mMoveCountL + ":" + hatch.hatchDynamic.mMoveCountR + ")  ";
         }
         System.out.println(str1);
-        //log
 
-        DP dp = new DP();
+        DP1 dp = new DP1();
         dpResult = dp.cwpKernel(cwpData.cranes, cwpData.hatches, cwpData.mt);
 
         DPResult dpResultCur = dpResult.deepCopy();
-
-        //evaluateCurDPResult(dpResultCur);
-//        if (dpResultCur.dpTraceBack.size() < cwpData.cranes.size()) {
-//            changeMoveCountDByKeyAndDividedHatch();
-//            changeDynamicMoveCount();
-//            calculateMoveTime(cwpData.mt, dpResultLast);
-//            //log
-//            String str2 = "2-dy(moveCount:L:R): ";
-//            for (Hatch hatch : cwpData.hatches) {
-//                str2 += hatch.hatchDynamic.mMoveCountDY + "(" + hatch.hatchDynamic.mMoveCount + ":" + hatch.hatchDynamic.mMoveCountL + ":" + hatch.hatchDynamic.mMoveCountR + ")  ";
-//            }
-//            System.out.println(str2);
-//            //log
-//            dpResult = dp.cwpKernel(cwpData.cranes, cwpData.hatches, cwpData.mt);
-//            dpResultCur = dpResult.deepCopy();
-//
-//            if (dpResultCur.dpTraceBack.size() < cwpData.cranes.size()) {
-//                notChangeMoveCountDByKeyAndDividedHatch();
-//                changeDynamicMoveCount();
-//                calculateMoveTime(cwpData.mt, dpResultLast);
-//                //log
-//                String str3 = "3-dy(moveCount:L:R): ";
-//                for (Hatch hatch : cwpData.hatches) {
-//                    str3 += hatch.hatchDynamic.mMoveCountDY + "(" + hatch.hatchDynamic.mMoveCount + ":" + hatch.hatchDynamic.mMoveCountL + ":" + hatch.hatchDynamic.mMoveCountR + ")  ";
-//                }
-//                System.out.println(str3);
-//                //log
-//                dpResult = dp.cwpKernel(cwpData.cranes, cwpData.hatches, cwpData.mt);
-//                dpResultCur = dpResult.deepCopy();
-//            }
-//        }
 
         dp_Results.add(dpResultCur);
         dpResult = dpResultCur.deepCopy();
 
         branch_width = Math.min(branch_width, dp_Results.get(0).dpTraceBack.size());
-        if (depth > d) {
-            branch_width = 0;
-        }
+        branch_width = depth > d ? 0 : branch_width;
+
         for (int i = 0; i < branch_width; i++) {
             List<CwpBlock> cwp_block = new ArrayList<>();
             Integer time = cwpRealWork(dp_Results.get(i), cwpData.cwpCurSolution.getCwpWorkTime(),
                     cwpData.cranes, cwpData.hatches, cwp_block);
-            cwpData.cwpCurSolution.getCwpResult().add(cwp_block);//?
+            cwpData.cwpCurSolution.getCwpResult().add(cwp_block);
             cwpData.cwpCurSolution.setCwpWorkTime(cwpData.cwpCurSolution.getCwpWorkTime() + time);
             cwpSearch(depth + 1);
         }
@@ -567,7 +498,6 @@ public class CWP1 {
 
         List<Pair> trace_back = dpResult.dpTraceBack;
         if (trace_back.isEmpty()) {
-            //get out method
             return 0;
         }
         int nr = trace_back.size();
@@ -578,22 +508,14 @@ public class CWP1 {
         }
         int min_time = Integer.MAX_VALUE;
         for (int t = 0; t < nr; t++) {
-//            int craneIdx = cwpData.craneIdxMap.get(trace_back.get(t).realCraneId);
-//            Crane crane = cranes.get(craneIdx);
             int craneIdx = (Integer) trace_back.get(t).first;
             Crane crane = cranes.get(craneIdx);
             Hatch hatch = hatches.get((Integer) trace_back.get(t).second);
-
-            cwp_block.get(t).setmCraneId(crane.getCraneId());
-            cwp_block.get(t).setmHatchId(hatch.getHatchId());
-            cwp_block.get(t).setmWorkStartTime(start_time); //crane work startTime
-
             if (hatch.hatchDynamic.mMoveCount == 0) {
                 cwp_block.get(t).setmTrueBlock(false);
                 continue;
             }
-            Double last_position = hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx).
-                    getHorizontalPosition();
+            Double last_position = hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx).getHorizontalPosition();
             for (int k = hatch.hatchDynamic.mCurrentMoveIdx; k < hatch.getMoveCount(); k++) {
                 if (hatch.getmMoves().get(k).getHorizontalPosition().doubleValue() != last_position.doubleValue()) {
                     break;
@@ -608,10 +530,8 @@ public class CWP1 {
                         break;
                     }
                 }
-
                 cwp_block.get(t).setmWorkCostTime(cwp_block.get(t).getmWorkCostTime() + cost(crane, hatch.getmMoves().get(k).getMoveType()));
             }
-
             min_time = Math.min(min_time, cwp_block.get(t).getmWorkCostTime());
         }
 
@@ -622,14 +542,16 @@ public class CWP1 {
             if (!cwpBlock.ismTrueBlock()) {
                 continue;
             }
-//            int craneIdx = cwpData.craneIdxMap.get(trace_back.get(t).realCraneId);
-//            Crane crane = cranes.get(craneIdx);
             Crane crane = cranes.get((Integer) trace_back.get(t).first);
             Hatch hatch = hatches.get((Integer) trace_back.get(t).second);
-            crane.craneDynamic.mCurrentPosition = hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx).getHorizontalPosition();
 
-            Move move = null;
+            cwpBlock.setmCraneId(crane.getCraneId());
+            cwpBlock.setmHatchId(hatch.getHatchId());
+            cwpBlock.setmWorkStartTime(start_time); //crane work startTime
             cwpBlock.setmWorkCostTime(0);
+
+            int startT = start_time;
+            Move move;
             for (; hatch.hatchDynamic.mCurrentMoveIdx < hatch.getMoveCount(); hatch.hatchDynamic.mCurrentMoveIdx++) {
                 int cur_cost = cost(crane, hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx).getMoveType());
                 if (cwpBlock.getmWorkCostTime() + cur_cost > min_time) {
@@ -637,34 +559,23 @@ public class CWP1 {
                 }
                 cwpBlock.setmWorkCostTime(cwpBlock.getmWorkCostTime() + cur_cost);
                 cwpBlock.setmMoveCount(cwpBlock.getmMoveCount() + 1);
-                cwpBlock.getmMoves().add(hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx));
                 move = hatch.getmMoves().get(hatch.hatchDynamic.mCurrentMoveIdx);
+                move.setmWorkStartTime(startT);
+                move.setmWorkEndTime(startT + cur_cost);
+                //
+                double moveDistance = Math.abs(move.getHorizontalPosition() - crane.craneDynamic.mCurrentPosition);
+                int moveT = (int) (moveDistance * 60 / crane.getSpeed());
+
+                move.setmRealWorkStartTime(startT);
+                cwpBlock.getmMoves().add(move);
+                crane.craneDynamic.mCurrentPosition = move.getHorizontalPosition();
+//                hatch.hatchDynamic.mCurrentWorkPosition = move.getHorizontalPosition();
+                startT = move.getmWorkEndTime();
             }
             cwpBlock.setmWorkEndTime(cwpBlock.getmWorkStartTime() + cwpBlock.getmWorkCostTime());
-
             cwpBlock.setmVesselId(hatch.getVesselId());
             cwpBlock.setmCraneId(crane.getCraneId());
             cwpBlock.setmHatchId(hatch.getHatchId());
-            String moveType = move.getMoveType();
-            String bayId = "";
-            int j = (int) trace_back.get(t).second;
-            if ("2".equals(moveType) || "3".equals(moveType)) {
-                bayId = String.valueOf((j + 1) * 4 - 2);
-            } else {
-                if (move.getHorizontalPosition().doubleValue() - hatch.getHorizontalStartPosition().doubleValue() == Double.valueOf(hatch.getLength()) / 4) {
-                    bayId = String.valueOf((j + 1) * 4 - 3);
-                } else if (move.getHorizontalPosition().doubleValue() - hatch.getHorizontalStartPosition().doubleValue() == Double.valueOf(hatch.getLength()) * 3 / 4) {
-                    bayId = String.valueOf((j + 1) * 4 - 1);
-                } else {
-                    bayId = String.valueOf((j + 1) * 4 - 2);
-                }
-            }
-            cwpBlock.setmHatchBayId(bayId);
-            cwpBlock.setmStartMoveId(move.getMoveOrder() - cwpBlock.getmMoveCount() + 1);
-            cwpBlock.setmRealWorkStartTime(start_time);//
-            cwpBlock.setmMoveType(moveType);
-            cwpBlock.setmLD(move.getLD());
-            cwpBlock.setmCranePosition(move.getHorizontalPosition());
 
             hatch.hatchDynamic.mMoveCount = hatch.getMoveCount() - hatch.hatchDynamic.mCurrentMoveIdx.longValue();
             hatch.hatchDynamic.mMoveCountDY = hatch.hatchDynamic.mMoveCount;
@@ -681,7 +592,30 @@ public class CWP1 {
     }
 
     public String writeResult() {
-        return WriteResult.write1(cwpData.cwpBestSolution.getCwpResult());
+        List<CwpBlock> cwpBlockList = new ArrayList<>();
+        List<List<CwpBlock>> cwpBlockResult = cwpData.cwpBestSolution.getCwpResult();
+        for (List<CwpBlock> cwpBlocks : cwpBlockResult) {
+            for (CwpBlock cwpBlock : cwpBlocks) {
+                for (Move move : cwpBlock.getmMoves()) {
+                    CwpBlock cb = new CwpBlock();
+                    cb.setmCraneId(cwpBlock.getmCraneId());
+                    cb.setmHatchId(cwpBlock.getmHatchId());
+                    cb.setmVesselId(cwpBlock.getmVesselId());
+                    cb.setmMoveCount(1);
+                    cb.setmCranePosition(move.getHorizontalPosition());
+                    cb.setmWorkStartTime(move.getmWorkStartTime());
+                    cb.setmWorkEndTime(move.getmWorkEndTime());
+                    cb.setmRealWorkStartTime(move.getmRealWorkStartTime());
+                    cb.setmLD(move.getLD());
+                    cb.setmMoveType(move.getMoveType());
+                    cb.setmStartMoveId(move.getMoveOrder());
+                    cwpBlockList.add(cb);
+                }
+            }
+        }
+        List<List<CwpBlock>> blocks = new ArrayList<>();
+        blocks.add(cwpBlockList);
+        return WriteResult.write(blocks);
     }
 
     public CwpData getCwpData() {

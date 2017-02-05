@@ -92,7 +92,7 @@ public class CwpResultPanel2 extends JPanel {
                 return o1.compareTo(o2);
             }
         });
-        Integer cabBay = vesselStructureInfoList.get(0).getCABPOSITION();
+        Integer cabBay = vesselStructureInfoList.get(0).getCABPOSITION() != null ? vesselStructureInfoList.get(0).getCABPOSITION() : 0;
         Integer cabLength = vesselStructureInfoList.get(0).getCABLENGTH();
         for (String hatchId : hatchList) {
 

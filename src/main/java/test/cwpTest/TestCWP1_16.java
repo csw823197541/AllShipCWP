@@ -5,7 +5,7 @@ import generateResult.GenerateMoveOrder;
 import importDataInfo.*;
 import importDataProcess.*;
 import utils.FileUtil;
-import viewFrme.*;
+import viewFrme.CwpResultFrame;
 
 import java.io.File;
 import java.util.*;
@@ -13,10 +13,10 @@ import java.util.*;
 /**
  * Created by csw on 2016/1/21.
  */
-public class TestCWP12_27 {
+public class TestCWP1_16 {
     public static void main(String[] args) {
 
-        String filePath = "data/cwp/12.27CWP/";
+        String filePath = "data/cwp/1.16CWP/";
 
         String vo = FileUtil.readFileToString(new File(filePath + "CwpVoyage.txt")).toString();
 

@@ -204,6 +204,7 @@ class GenerateCwpResult {
             newHatchInfo.setNO(hatchPositionInfo.getVHTID());
             newHatchInfo.setSEQ(hatchPositionInfo.getVHTID());
             newHatchInfo.setWORKINGTIMERANGES(workingTimeRangeList);//工作时间
+            newHatchInfo.setCabPosition(hatchPositionInfo.getCabPosition());
 
             hatchInfoList.add(newHatchInfo);
         }
@@ -265,8 +266,14 @@ class GenerateCwpResult {
         }
 
         int length = vesselStructureInfoList.get(0).getLENGTH()//舱长度
-        int cabL = vesselStructureInfoList.get(0).getCABLENGTH()   //驾驶室长度
-        int cabPosition = vesselStructureInfoList.get(0).getCABPOSITION();//驾驶室在哪个倍位号后面
+        int cabL = 0   //驾驶室长度
+        if (vesselStructureInfoList.get(0).getCABLENGTH() != null) {
+            cabL = vesselStructureInfoList.get(0).getCABLENGTH()   //驾驶室长度
+        }
+        int cabPosition = 0;//驾驶室在哪个倍位号后面
+        if (vesselStructureInfoList.get(0).getCABPOSITION() != null) {
+            cabPosition = vesselStructureInfoList.get(0).getCABPOSITION();//驾驶室在哪个倍位号后面
+        }
 
         boolean isAllHavePosition = true;
         if (hatchPositionMap.size() == 0) {
@@ -350,6 +357,7 @@ class GenerateCwpResult {
 
         ImportData.bayPositionMap = bayWeiPositionMap;//倍位中心绝对位置坐标，有大倍和小倍
 
+        String cab = null;
         for (VesselStructureInfo vesselStructureInfo : vesselStructureInfoList) {
             String hatchId = vesselStructureInfo.getVHTID().toString();
             vesselStructureInfo.setVHTPOSITION(hatchPositionMap.get(hatchId))//将舱开始相对于船头位置赋值
@@ -358,11 +366,16 @@ class GenerateCwpResult {
             String bayWeiId = vesselStructureInfo.getVBYBAYID().toString();
             vesselStructureInfo.setVBYPOSITION(bayWeiPositionMap.get(bayWeiId))//将倍位中心相对于船头位置赋值
 
+            if (cabPosition == Integer.valueOf(vesselStructureInfo.getVBYBAYID())) {
+                cab = vesselStructureInfo.getVHTID();
+            }
+
             if (!hatchSet.contains(hatchId)) {
                 HatchPositionInfo hatchPositionInfo = new HatchPositionInfo();
                 hatchPositionInfo.setVHTID(hatchId);
                 hatchPositionInfo.setLENGTH(Length);
                 hatchPositionInfo.setPOSITION(hatchPosition);
+                hatchPositionInfo.setCabPosition(cab);
                 hatchSet.add(hatchId);
                 hatchPositionInfoList.add(hatchPositionInfo);
             }

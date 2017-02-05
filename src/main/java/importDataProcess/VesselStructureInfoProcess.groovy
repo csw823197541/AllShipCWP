@@ -24,6 +24,7 @@ class VesselStructureInfoProcess {
                 assert vesselStructure instanceof Map
                 vesselStructureInfo.VHTID = vesselStructure.VHTID
                 vesselStructureInfo.LENGTH = Integer.valueOf(vesselStructure.LENGTH)
+//                vesselStructureInfo.LENGTH = 14
                 vesselStructureInfo.VHTPOSITION = vesselStructure.VHTPOSITION
                 vesselStructureInfo.VBYBAYID = vesselStructure.VBYBAYID
 //                vesselStructureInfo.VBYPOSITION = vesselStructure.VBYPOSITION
@@ -32,7 +33,8 @@ class VesselStructureInfoProcess {
                 vesselStructureInfo.VRWROWNO = vesselStructure.VRWROWNO
                 vesselStructureInfo.VRWROWSEQ = Integer.valueOf(vesselStructure.VRWROWSEQ)
                 vesselStructureInfo.CABLENGTH = Integer.valueOf(vesselStructure.CABLENGTH)
-                vesselStructureInfo.CABPOSITION = Integer.valueOf(vesselStructure.CABPOSITION)
+//                vesselStructureInfo.CABLENGTH = 14
+                vesselStructureInfo.CABPOSITION = vesselStructure.CABPOSITION
                 vesselStructureInfo.weightGradeMin = vesselStructure.weightGradeMin
                 vesselStructureInfo.weightGradeMax = vesselStructure.weightGradeMax
                 vesselStructureInfoList.add(vesselStructureInfo)

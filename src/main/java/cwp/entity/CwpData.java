@@ -10,9 +10,15 @@ public class CwpData {
 
     public Integer cwpBranchWidth = 1;
     public Integer cwpBranchLimit = 4;
+    public Integer cabPosition = -1;
 
-    public static Long surplusMoveCount = 0L;
-    public static Long moveCostTime = 0L;
+    public Long surplusMoveCount = 0L;
+    public Long moveCostTime = 0L;
+    public Integer passCabTime = 120;
+    public Integer amount = 15;
+    public Long keyHatchMoveCount = 100000L;
+    public Long dividedHatchMoveCount = 10000L;
+    public Long keepWorkingMoveCount = 2000000L;
 
     public List<Crane> cranes;
     public List<Hatch> hatches;

@@ -32,6 +32,7 @@ class HatchInfoProcess {
                     map.put("MOVECOUNT", it.MOVECOUNT)
                     map.put("NO", Integer.valueOf(it.NO))
                     map.put("SEQ", Integer.valueOf(it.SEQ))
+                    map.put("cabPosition", it.cabPosition)
                     def workingTimeRange = it.WORKINGTIMERANGES
                     assert workingTimeRange instanceof List
                     List<Map<String, Object>> listT = new ArrayList<>()

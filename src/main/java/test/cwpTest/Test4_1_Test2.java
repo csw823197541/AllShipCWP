@@ -22,7 +22,7 @@ public class Test4_1_Test2 {
 
         String sh = FileUtil.readFileToString(new File(filePath + "CwpVslStr.txt")).toString();
 
-        String cr = FileUtil.readFileToString(new File(filePath + "CwpCrane.txt")).toString();
+        String cr = FileUtil.readFileToString(new File(filePath + "CwpCrane3.txt")).toString();
 
         String pr = FileUtil.readFileToString(new File(filePath + "CwpPerStowage.txt")).toString();
 

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by csw on 2017/1/7 10:43.
  * Explain:
  */
-public class DP {
+public class DP1 {
 
     public DPResult cwpKernel(List<Crane> cranes, List<Hatch> hatches, MoveTime[][] mt) {
 
@@ -36,12 +36,6 @@ public class DP {
             DPResult cur_dp = new DPResult();
             cur_dp.dpMoveCount = hatches.get(0).hatchDynamic.mMoveCountDY - mt[i][0].dpMoveTime;
             cur_dp.dpDistance = Math.abs(cranes.get(i).craneDynamic.mCurrentPosition - hatches.get(0).hatchDynamic.mCurrentWorkPosition);
-//            if (better(cur_dp, dp[i - 1][0])) {
-//                dp[i][0] = cur_dp.deepCopy();
-//                dp[i][0].dpTraceBack.add(new Pair(i, 0, cranes.get(i).getCraneId()));
-//            } else {
-//                dp[i][0] = dp[i - 1][0].deepCopy();
-//            }
             dp[i][0] = cur_dp.deepCopy();
             dp[i][0].dpTraceBack.add(new Pair(i, 0, cranes.get(i).getCraneId()));
         }
@@ -75,18 +69,12 @@ public class DP {
 
                 DPResult tmp_dp = new DPResult();
 
-//                if (better(dp[i][j - 1], dp[i - 1][j])) {
-//                    tmp_dp = dp[i][j - 1].deepCopy();
-//                } else {
-//                    tmp_dp = dp[i - 1][j].deepCopy();
-//                }
                 tmp_dp = dp[i][j - 1].deepCopy();
                 if (better(cur_dp, tmp_dp)) {
                     dp[i][j] = cur_dp.deepCopy();
                     if (hatches.get(j).hatchDynamic.mMoveCountDY - mt[i][j].dpMoveTime > 0) {
                         dp[i][j].dpTraceBack.add(new Pair(i, j, cranes.get(i).getCraneId()));
                     }
-//                    dp[i][j].dpTraceBack.add(new Pair(i, j, cranes.get(i).getCraneId()));
                 } else {
                     dp[i][j] = tmp_dp.deepCopy();
                 }
@@ -105,29 +93,10 @@ public class DP {
             System.out.println(str);
         }
 
-//        if (dp[nc - 1][nh -1].dpTraceBack.size() == 0) {
-//            return dp[nc - 2][nh - 1].deepCopy();
-//        } else {
-//            return dp[nc - 1][nh - 1].deepCopy();
-//        }
-
         return dp[nc - 1][nh - 1].deepCopy();
     }
 
     private boolean better(DPResult cur_dp, DPResult dpResult) {
-//        if (cur_dp.dpMoveCount.longValue() > dpResult.dpMoveCount.longValue()) {
-//            return true;
-//        } else if (cur_dp.dpMoveCount.longValue() == dpResult.dpMoveCount.longValue()) {
-//            if (cur_dp.dpDistance.doubleValue() < dpResult.dpDistance.doubleValue()) {
-//                return true;
-//            } else if (cur_dp.dpDistance.doubleValue() == dpResult.dpDistance.doubleValue()){
-//                return cur_dp.dpMoveCount.longValue() > 0;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
         return cur_dp.dpMoveCount.longValue() > dpResult.dpMoveCount.longValue()
                 ? true : (cur_dp.dpMoveCount.longValue() == dpResult.dpMoveCount.longValue()
                 ? cur_dp.dpDistance.doubleValue() < dpResult.dpDistance.doubleValue() : false);

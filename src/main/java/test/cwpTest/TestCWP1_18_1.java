@@ -5,7 +5,8 @@ import generateResult.GenerateMoveOrder;
 import importDataInfo.*;
 import importDataProcess.*;
 import utils.FileUtil;
-import viewFrme.*;
+import viewFrme.CwpResultFrame;
+import viewFrme.PreStowageDataFrame;
 
 import java.io.File;
 import java.util.*;
@@ -13,10 +14,10 @@ import java.util.*;
 /**
  * Created by csw on 2016/1/21.
  */
-public class TestCWP12_27 {
+public class TestCWP1_18_1 {
     public static void main(String[] args) {
 
-        String filePath = "data/cwp/12.27CWP/";
+        String filePath = "data/cwp/1.18CWP1/";
 
         String vo = FileUtil.readFileToString(new File(filePath + "CwpVoyage.txt")).toString();
 
@@ -65,8 +66,8 @@ public class TestCWP12_27 {
         Long moveOrderAndWorkFlowNo = 1L;
         List<PreStowageData> resultList = GenerateMoveOrder.getMoveOrderAndWorkFlow(moveOrderAndWorkFlowNo, voyageInfoList, preStowageDataList, vesselStructureInfoList, workFlowMap);
         System.out.println("提示信息：" + ExceptionProcess.getExceptionInfo(moveOrderAndWorkFlowNo));
-//        PreStowageDataFrame preStowageFrame2 = new PreStowageDataFrame(resultList);
-//        preStowageFrame2.setVisible(true);
+        PreStowageDataFrame preStowageFrame2 = new PreStowageDataFrame(resultList);
+        preStowageFrame2.setVisible(true);
 
         //调用cwp算法得到结果
         Long cwpNo = 2L;

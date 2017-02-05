@@ -1,9 +1,6 @@
 package cwp;
 
-import cwp.process.CWP;
-import cwp.process.CWP1;
-import cwp.process.CWP2;
-import cwp.process.CWP3;
+import cwp.process.*;
 
 /**
  * Created by csw on 2017/1/6 20:25.
@@ -14,15 +11,21 @@ public class CallCWP {
     public static String cwp(String craneJsonStr, String hatchJsonStr, String moveJsonStr) {
 
         long dyStartTime = System.currentTimeMillis();
-        CWP1 cwp = new CWP1();
-        cwp.initData(craneJsonStr, hatchJsonStr, moveJsonStr);
-        cwp.whoIsKeyHatch();
-        cwp.divideCraneMoveRange();
-        cwp.cwpSearch(0);
+        CWP4 cwp = new CWP4();
+        String resultStr = null;
+        try {
+            cwp.initData(craneJsonStr, hatchJsonStr, moveJsonStr);
+            cwp.whoIsKeyHatch();
+            cwp.divideCraneMoveRange();
+            cwp.cwpSearch(0);
+            resultStr = cwp.writeResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         long dyEndTime = System.currentTimeMillis();
-        String str = cwp.writeResult();
 
         System.out.println("The time of the cwp algorithm is: " + (dyEndTime - dyStartTime) + " ms");
-        return str;
+        return resultStr;
     }
 }

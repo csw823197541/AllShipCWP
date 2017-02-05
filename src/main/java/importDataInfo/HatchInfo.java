@@ -13,6 +13,7 @@ public class HatchInfo {
     private Integer MOVECOUNT;                        //MOVE数量
     private String NO;                                 //船舱编号
     private String SEQ;                                //序列
+    private String cabPosition;                    //驾驶室在哪个舱后面
     private List<WorkingTimeRange> WORKINGTIMERANGES;//工作时间
 
     public Double getHORIZONTALSTARTPOSITION() {
@@ -77,5 +78,13 @@ public class HatchInfo {
 
     public void setWORKINGTIMERANGES(List<WorkingTimeRange> WORKINGTIMERANGES) {
         this.WORKINGTIMERANGES = WORKINGTIMERANGES;
+    }
+
+    public String getCabPosition() {
+        return cabPosition;
+    }
+
+    public void setCabPosition(String cabPosition) {
+        this.cabPosition = cabPosition;
     }
 }

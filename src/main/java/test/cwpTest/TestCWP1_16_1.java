@@ -5,7 +5,8 @@ import generateResult.GenerateMoveOrder;
 import importDataInfo.*;
 import importDataProcess.*;
 import utils.FileUtil;
-import viewFrme.*;
+import viewFrme.CwpResultFrame;
+import viewFrme.VesselStructureFrame;
 
 import java.io.File;
 import java.util.*;
@@ -13,16 +14,16 @@ import java.util.*;
 /**
  * Created by csw on 2016/1/21.
  */
-public class TestCWP12_27 {
+public class TestCWP1_16_1 {
     public static void main(String[] args) {
 
-        String filePath = "data/cwp/12.27CWP/";
+        String filePath = "data/cwp/1.16CWP1/";
 
         String vo = FileUtil.readFileToString(new File(filePath + "CwpVoyage.txt")).toString();
 
         String sh = FileUtil.readFileToString(new File(filePath + "CwpVslStr.txt")).toString();
 
-        String cr = FileUtil.readFileToString(new File(filePath + "CwpCrane.txt")).toString();
+        String cr = FileUtil.readFileToString(new File(filePath + "CwpCrane1.txt")).toString();
 
         String pr = FileUtil.readFileToString(new File(filePath + "CwpPerStowage.txt")).toString();
 
@@ -34,8 +35,8 @@ public class TestCWP12_27 {
         //船舶结构
         List<VesselStructureInfo> vesselStructureInfoList = VesselStructureInfoProcess.getVesselStructureInfo(sh);
         ImportData.vesselStructureInfoList = vesselStructureInfoList;
-//        VesselStructureFrame vesselStructureFrame = new VesselStructureFrame(vesselStructureInfoList);
-//        vesselStructureFrame.setVisible(true);
+        VesselStructureFrame vesselStructureFrame = new VesselStructureFrame(vesselStructureInfoList);
+        vesselStructureFrame.setVisible(true);
 
         //桥机
         List<CraneInfo> craneInfoList = CraneInfoProcess.getCraneInfo(cr);

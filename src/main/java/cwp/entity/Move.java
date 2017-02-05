@@ -16,6 +16,10 @@ public class Move implements Serializable {
     private String LD;
     private String moveType;
 
+    private Integer mWorkStartTime;
+    private Integer mWorkEndTime;
+    private Integer mRealWorkStartTime;
+
     public Integer getMoveOrder() {
         return moveOrder;
     }
@@ -70,5 +74,29 @@ public class Move implements Serializable {
 
     public void setMoveType(String moveType) {
         this.moveType = moveType;
+    }
+
+    public Integer getmWorkStartTime() {
+        return mWorkStartTime;
+    }
+
+    public void setmWorkStartTime(Integer mWorkStartTime) {
+        this.mWorkStartTime = mWorkStartTime;
+    }
+
+    public Integer getmWorkEndTime() {
+        return mWorkEndTime;
+    }
+
+    public void setmWorkEndTime(Integer mWorkEndTime) {
+        this.mWorkEndTime = mWorkEndTime;
+    }
+
+    public Integer getmRealWorkStartTime() {
+        return mRealWorkStartTime;
+    }
+
+    public void setmRealWorkStartTime(Integer mRealWorkStartTime) {
+        this.mRealWorkStartTime = mRealWorkStartTime;
     }
 }

@@ -17,6 +17,7 @@ public class Hatch implements Serializable {
     private Integer moveCount;
     private String hatchNo;
     private String hatchSeq;
+    private String cabPosition;
     private List<WorkTimeRange> workTimeRanges;
 
     public HatchDynamic hatchDynamic;
@@ -105,6 +106,14 @@ public class Hatch implements Serializable {
 
     public void setWorkTimeRanges(List<WorkTimeRange> workTimeRanges) {
         this.workTimeRanges = workTimeRanges;
+    }
+
+    public String getCabPosition() {
+        return cabPosition;
+    }
+
+    public void setCabPosition(String cabPosition) {
+        this.cabPosition = cabPosition;
     }
 
     public Hatch deepCopy() {

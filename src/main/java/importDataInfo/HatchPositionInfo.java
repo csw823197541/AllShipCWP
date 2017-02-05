@@ -8,6 +8,8 @@ public class HatchPositionInfo {
     private Integer LENGTH;        //舱位长度
     private Double POSITION;      //舱位左边缘的绝对位置
 
+    private String cabPosition; //驾驶室在那个舱后面，舱号
+
     public String getVHTID() {
         return VHTID;
     }
@@ -30,5 +32,13 @@ public class HatchPositionInfo {
 
     public void setPOSITION(Double POSITION) {
         this.POSITION = POSITION;
+    }
+
+    public String getCabPosition() {
+        return cabPosition;
+    }
+
+    public void setCabPosition(String cabPosition) {
+        this.cabPosition = cabPosition;
     }
 }

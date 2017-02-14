@@ -30,7 +30,7 @@ public class CWP4 {
     public void initData(String craneJsonStr, String hatchJsonStr, String moveJsonStr) throws Exception {
 
         List<Crane> inputCranes = sortCraneByPosition(InitData.initCrane(craneJsonStr));
-        int craneSize = inputCranes.size() > 4 ? 5 : inputCranes.size();
+        int craneSize = inputCranes.size() > 4 ? 7 : inputCranes.size();
         for (int k = 0; k < craneSize; k++) {
             cwpData.cranes.add(inputCranes.get(k));
         }
@@ -252,7 +252,7 @@ public class CWP4 {
     }
 
     //change crane move range, when the mMoveCount of the hatch reach the value of mMoveCountL
-    private void changeCraneMoveRange() {
+    private void changeCraneMoveRange(DPResult dpResult) {
         boolean isChange = false;
         int nc = cwpData.cranes.size();
         for (Integer i : cwpData.craneMoveFromToMap.keySet()) {
@@ -261,25 +261,29 @@ public class CWP4 {
             if (hatchList.size() > 0) {
                 Hatch hatchLeft = hatchList.get(0);
                 Hatch hatchRight = hatchList.get(hatchList.size() - 1);
-                if (hatchLeft.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountL.intValue()) {
-                    if (hatchLeft.hatchDynamic.mMoveCountL > 0) {
-                        isChange = true;
-                        System.out.println("reach the right mMoveCount: " + hatchLeft.hatchDynamic.mCurrentMoveIdx);
-                        crane.craneDynamic.mMoveRangeFrom += 1;
-                        crane.craneDynamic.mMoveCountL = -1L;
-                        hatchLeft.hatchDynamic.mMoveCountR = 0L;
+                if (findSelectHatchIdx(dpResult, i) != -1) {
+                    Hatch selectHatch = cwpData.hatches.get(findSelectHatchIdx(dpResult, i));
+                    if (selectHatch.getHatchId().equals(hatchLeft.getHatchId()) && hatchLeft.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountL.intValue()) {
+                        if (hatchLeft.hatchDynamic.mMoveCountL > 0) {
+                            isChange = true;
+                            System.out.println("reach the right mMoveCount: " + hatchLeft.hatchDynamic.mCurrentMoveIdx);
+                            crane.craneDynamic.mMoveRangeFrom += 1;
+                            crane.craneDynamic.mMoveCountL = -1L;
+                            hatchLeft.hatchDynamic.mMoveCountR = 0L;
+                        }
+                    } else if (selectHatch.getHatchId().equals(hatchRight.getHatchId()) && hatchRight.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountR.intValue()) {
+                        if (hatchRight.hatchDynamic.mMoveCountR > 0) {
+                            isChange = true;
+                            System.out.println("reach the left mMoveCount: " + hatchRight.hatchDynamic.mCurrentMoveIdx);
+                            crane.craneDynamic.mMoveRangeTo -= 1;
+                            crane.craneDynamic.mMoveCountR = -1L;
+                            hatchRight.hatchDynamic.mMoveCountL = 0L;
+                        }
+                    } else {
+                        //test crane breakdown
                     }
-                } else if (hatchRight.hatchDynamic.mCurrentMoveIdx == crane.craneDynamic.mMoveCountR.intValue()) {
-                    if (hatchRight.hatchDynamic.mMoveCountR > 0) {
-                        isChange = true;
-                        System.out.println("reach the left mMoveCount: " + hatchRight.hatchDynamic.mCurrentMoveIdx);
-                        crane.craneDynamic.mMoveRangeTo -= 1;
-                        crane.craneDynamic.mMoveCountR = -1L;
-                        hatchRight.hatchDynamic.mMoveCountL = 0L;
-                    }
-                } else {
-                    //test crane breakdown
                 }
+
             }
         }
         if (isChange) {//if crane's moveRange had changed
@@ -291,6 +295,15 @@ public class CWP4 {
                 }
             }
         }
+    }
+    private Integer findSelectHatchIdx(DPResult dpResult, Integer craneIdx) {
+        Integer hatchIdx = -1;
+        for (int i = 0; i < dpResult.dpTraceBack.size(); i++) {
+            if ((int) dpResult.dpTraceBack.get(i).first == craneIdx) {
+                hatchIdx = (Integer) dpResult.dpTraceBack.get(i).second;
+            }
+        }
+        return hatchIdx;
     }
 
     //
@@ -438,7 +451,7 @@ public class CWP4 {
         DPResult dpResultLast = dpResult.deepCopy();
 
         //before every dynamic plan, must check the crane's moveRange
-        changeCraneMoveRange();
+        changeCraneMoveRange(dpResultLast);
         //log
         String str2 = "crane move range: ";
         for (Crane crane : cwpData.cranes) {

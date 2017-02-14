@@ -15,7 +15,7 @@ public class CwpData {
     public Long surplusMoveCount = 0L;
     public Long moveCostTime = 0L;
     public Integer passCabTime = 120;
-    public Integer amount = 15;
+    public Integer amount = 0;
     public Long keyHatchMoveCount = 100000L;
     public Long dividedHatchMoveCount = 10000L;
     public Long keepWorkingMoveCount = 2000000L;

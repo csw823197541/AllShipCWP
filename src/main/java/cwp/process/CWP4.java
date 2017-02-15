@@ -30,7 +30,7 @@ public class CWP4 {
     public void initData(String craneJsonStr, String hatchJsonStr, String moveJsonStr) throws Exception {
 
         List<Crane> inputCranes = sortCraneByPosition(InitData.initCrane(craneJsonStr));
-        int craneSize = inputCranes.size() > 4 ? 7 : inputCranes.size();
+        int craneSize = inputCranes.size() > 4 ? 5 : inputCranes.size();
         for (int k = 0; k < craneSize; k++) {
             cwpData.cranes.add(inputCranes.get(k));
         }

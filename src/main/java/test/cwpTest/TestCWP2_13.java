@@ -66,8 +66,8 @@ public class TestCWP2_13 {
         Long moveOrderAndWorkFlowNo = 1L;
         List<PreStowageData> resultList = GenerateMoveOrder.getMoveOrderAndWorkFlow(moveOrderAndWorkFlowNo, voyageInfoList, preStowageDataList, vesselStructureInfoList, workFlowMap);
         System.out.println("提示信息：" + ExceptionProcess.getExceptionInfo(moveOrderAndWorkFlowNo));
-//        PreStowageDataFrame preStowageFrame2 = new PreStowageDataFrame(resultList);
-//        preStowageFrame2.setVisible(true);
+        PreStowageDataFrame preStowageFrame2 = new PreStowageDataFrame(resultList);
+        preStowageFrame2.setVisible(true);
 
         //调用cwp算法得到结果
         Long cwpNo = 2L;

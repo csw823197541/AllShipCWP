@@ -85,7 +85,7 @@ public class DP1 {
         for (int i = 0; i < nc; i++) {
             String str = "--";
             for (int j = 0; j < nh; j++) {
-                str += dp[i][j].dpMoveCount + "-";
+                str += dp[i][j].dpMoveCount + " ";
             }
             for (int t = 0; t < dp[i][nh - 1].dpTraceBack.size(); t++) {
                 str += "(" + dp[i][nh -1].dpTraceBack.get(t).first + "," + dp[i][nh -1].dpTraceBack.get(t).second + ")";
